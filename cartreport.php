@@ -8,17 +8,26 @@ if(isset($_POST["customername"]) && ($_POST["customername"]!="")){
 	if(!is_object($cart)) $cart = new myCart();
 	//購物車結束	
 	//新增訂單資料
-	$sql_query = "INSERT INTO orders (total ,customername ,customeremail ,customeraddress ,customerphone ,paytype) VALUES (?, ?, ?, ?, ?, ?)";
-	$stmt = $db_link->prepare($sql_query);
-	$stmt->bind_param("isssss", $cart->total, $_POST["customername"], $_POST["customeremail"], $_POST["customeraddress"], $_POST["customerphone"], $_POST["paytype"]);
-	$stmt->execute();
+	$sql_query = "INSERT INTO orders (m_id, total ,customername ,customeremail ,customeraddress ,customerphone ,paytype) VALUES (";
+    $sql_query .= "'".$_SESSION["m_id"]."',";
+    $sql_query .= "'".$cart->total."',";
+    $sql_query .= "'".$_POST["customername"]."',";
+    $sql_query .= "'".$_POST["customeremail"]."',";
+    $sql_query .= "'".$_POST["customeraddress"]."',";
+    $sql_query .= "'".$_POST["customerphone"]."',";
+	$sql_query .= "'".$_POST["paytype"]."')";
+	mysqli_query($db_link, $sql_query);
+	//$sql_query = "INSERT INTO orders (m_id, total ,customername ,customeremail ,customeraddress ,customerphone ,paytype) VALUES (?, ?, ?, ?, ?, ?, ?)";
+	//$stmt = $db_link->prepare($sql_query);
+	//$stmt->bind_param("iisssss",$_SESSION["m_id"], $cart->total, $_POST["customername"], $_POST["customeremail"], $_POST["customeraddress"], $_POST["customerphone"], $_POST["paytype"]);
+	//$stmt->execute();
 	//取得新增的訂單編號
-	$o_pid = $stmt->insert_id;
-	$stmt->close();
+	//$o_pid = $stmt->insert_id;
+	//$stmt->close();
 	//新增訂單內貨品資料
 	if($cart->itemcount > 0) {
 		foreach($cart->get_contents() as $item) {
-			$sql_query="INSERT INTO orderdetail (orderid ,kit_id ,kit_title ,unitprice ,quantity) VALUES (?, ?, ?, ?, ?)";
+			$sql_query="INSERT INTO orderdetail (orderid ,productid ,productname ,unitprice ,quantity) VALUES (?, ?, ?, ?, ?)";
 			$stmt = $db_link->prepare($sql_query);
 			$stmt->bind_param("iisii", $o_pid, $item['id'], $item['info'], $item['price'], $item['qty']);
 			$stmt->execute();
@@ -49,7 +58,8 @@ alert("感謝您的租借，我們將儘快進行處理。");
 <h1>租借明細表單</h1>
 <table width="100%" border="0" align="center" cellpadding="2" cellspacing="1">
     <tr>
-        <td align="center" bgcolor="#ECE1E1">顧客姓名</td>
+		<td align="center" bgcolor="#ECE1E1">會員編號</td>
+        <td align="center" bgcolor="#ECE1E1">姓名(租借人)</td>
         <td align="center" bgcolor="#ECE1E1">電子信箱</td>
         <td align="center" bgcolor="#ECE1E1">電話號碼</td>
         <td align="center" bgcolor="#ECE1E1">地址</td>
@@ -58,6 +68,8 @@ alert("感謝您的租借，我們將儘快進行處理。");
         <td align="center" bgcolor="#ECE1E1">廚房場地名稱</td>
         <td align="center" bgcolor="#ECE1E1">租借時間</td>
     </tr>
+	
+		<td align="center" bgcolor="#F6F6F6"><?php echo $_SESSION['m_id'];?></td>
         <td align="center" bgcolor="#F6F6F6"><?php echo $cname;?></td>
         <td align="center" bgcolor="#F6F6F6"><?php echo $cmail;?></td>
         <td align="center" bgcolor="#F6F6F6"><?php echo $ctel;?></td>
@@ -76,3 +88,7 @@ alert("感謝您的租借，我們將儘快進行處理。");
 	
 	
 	
+    
+    
+    
+    

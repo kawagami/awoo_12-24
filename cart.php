@@ -13,18 +13,18 @@ if(isset($_POST["cartaction"]) && ($_POST["cartaction"]=="update")){
 			$cart->edit_item($_POST['updateid'][$j],$_POST['qty'][$j]);
 		}
 	}
-	header("Location: cart1221.php");
+	header("Location: cart.php");
 }
 // 移除購物車內容
 if(isset($_GET["cartaction"]) && ($_GET["cartaction"]=="remove")){
 	$rid = intval($_GET['delid']);
 	$cart->del_item($rid);
-	header("Location: cart1221.php");	
+	header("Location: cart.php");	
 }
 // 清空購物車內容
 if(isset($_GET["cartaction"]) && ($_GET["cartaction"]=="empty")){
 	$cart->empty_cart();
-	header("Location: cart1221.php");
+	header("Location: cart.php");
 }
 //購物車結束
 //繫結產品目錄資料
@@ -77,39 +77,7 @@ $row_RecTotal = $RecTotal->fetch_assoc();
         <td class="tdbline">
         <table align="center" border="0" cellspacing="0" cellpadding="10">
         <tr valign="top">
-        <td width="200" class="tdrline">
-            <div class="categorybox">
-              <p class="heading"><img src="images/16-cube-green.png" width="16" height="16" align="absmiddle"> 廚房場地搜尋 <span class="smalltext"></span></p>
-              <form name="form1" method="get" action="cartindex.php">
-                <p>
-                  <input name="keyword" type="text" id="keyword" value="請輸入關鍵字" size="12" onClick="this.value='';">
-                  <input type="submit" id="button" value="查詢">
-                  </p>
-              </form>
-              <p class="heading"><img src="images/16-cube-green.png" width="16" height="16" align="absmiddle">價格區間<span class="smalltext"></span></p>
-              <form action="cartindex.php" method="get" name="form2" id="form2">
-                <p>
-                  <input name="price1" type="text" id="price1" value="0" size="3">
-                  -
-                  <input name="price2" type="text" id="price2" value="0" size="3">
-                <input type="submit" id="button2" value="查詢"><br><br>
-                <input type="button" name="backbtn" id="button4" value="回上一頁" onClick="window.history.back();">
-                <input type="button" name="button6" id="button6" value="回到廚房場地出租系統" onClick="window.location.href='cartindex.php';">
-                </p>
-              </form>
-            </div>                   	
-            <hr width="100%" size="1">         
-            <div class="categorybox">
-              <p class="heading"><img src="images/16-cube-orange.png" width="16" height="16" align="absmiddle"> 廚房縣市分類 <span class="smalltext"></span></p>
-              <ul>
-                <li><a href="cartindex.php">所有廚房<span class="citydatacount">(<?php echo $row_RecTotal["totalNum"];?>)</span></a></li>
-                <?php	while($row_RecCategory=$RecCategory->fetch_assoc()){ ?>
-                <li><a href="cartindex.php?cid=<?php echo $row_RecCategory["c_id"];?>"><?php echo $row_RecCategory["c_name"];?> <span class="citydatacount">(<?php echo $row_RecCategory["productNum"];?>)</span></a></li>
-                <?php }?>
-              </ul>
-            </div>
-        </td>
-         <td><div class="subjectDiv"> <span class="heading"><img src="images/16-cube-orange.png" width="16" height="16" align="absmiddle"></span><p align="left">租借廚房場地資料：</p></div>
+         <td><div class="subjectDiv"> <span class="heading"><p align="left">租借廚房場地資料：</p></div>
           <div class="normalDiv">
 		  <?php if($cart->itemcount > 0) {?>
           <form action="" method="post" name="cartform" id="cartform">
@@ -189,9 +157,9 @@ $row_RecTotal = $RecTotal->fetch_assoc();
                         <br>
             <p align="center">
               <input name="cartaction" type="hidden" id="cartaction" value="update">
-              <input type="submit" name="updatebtn" id="button3" value="更新購物車">
-              <input type="button" name="emptybtn" id="button5" value="清空購物車" onClick="window.location.href='?cartaction=empty'">
-              <input type="button" name="button" id="button6" value="前往結帳" onClick="window.location.href='checkout.php';">
+              <input type="submit" class="button button1" name="updatebtn" id="button3" value="更新購物車">
+              <input type="button" class="button button1" name="emptybtn" id="button5" value="清空購物車" onClick="window.location.href='?cartaction=empty'">
+              <input type="button" class="button button1" name="button" id="button6" value="前往結帳" onClick="window.location.href='checkout.php';">
               </p>
           </form>
           </div>          
