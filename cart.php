@@ -26,6 +26,9 @@ if(isset($_GET["cartaction"]) && ($_GET["cartaction"]=="empty")){
 	$cart->empty_cart();
 	header("Location: cart.php");
 }
+if(isset($_GET["cartaction"]) && ($_GET["cartaction"]=="back")){
+	header("Location: kitchen_index.php");
+}
 //購物車結束
 //繫結產品目錄資料
 $query_RecCategory = "SELECT citydata.c_id, citydata.c_name, count(kitchen_data.kit_id) as productNum FROM citydata LEFT JOIN kitchen_data ON citydata.c_name = kitchen_data.kit_county GROUP BY citydata.c_id, citydata.c_name ORDER BY citydata.c_id ASC";
@@ -62,13 +65,13 @@ $row_RecTotal = $RecTotal->fetch_assoc();
             <label class="menu-icon" for="menu-btn"><span class="nav-icon"></span></label>
             <ul class="menu">
 				<li><a href="about.php">品牌起源</a></li>
-				<li><a href="#forget">看看環境</a></li>
+				<li><a href="kitchen_index.php">看看環境</a></li>
 				<li><a href="#subscribe">?????</a></li>
 				<?php if(!isset($_SESSION["loginMember"]) || ($_SESSION["loginMember"]=="")){?>
-					<li><a href="member_index.php">Sign in</a></li><br>
-					<?php }
-					elseif($_SESSION["loginMember"]=="admin"){ echo "<li><a href='admin_add.php'>管理公告</a></li>"."<li><a href='member_admin.php'>系統管理</a></li>"."<li><a href='?logout=true'>Sign out&nbsp[".$_SESSION["loginMember"]."]</a></li>"; }
-					else{ echo "<li><a href='member_center.php'>會員中心</a></li>"."<li><a href='?logout=true'>Sign out&nbsp[".$_SESSION["loginMember"]."]</a></li>"; }?></a>
+				<li><a href="member_index.php">Sign in</a></li><br>
+				<!--這段更改--><a href="member_admin.php"><?php }
+				elseif($_SESSION["loginMember"]=="admin"){ echo "<li><a href='admin_add.php'>管理公告</a></li>"."<li><a href='member_admin.php'>系統管理</a></li>"."<li><a href='?logout=true'>Sign out&nbsp[".$_SESSION["loginMember"]."]</a></li>"; }
+				else{ echo "<li><a href='member_center.php'>會員中心</a></li>"."<li><a href='?logout=true'>Sign out&nbsp[".$_SESSION["loginMember"]."]</a></li>"; }?></a>
 			</ul>
         </header>
 		<div class="id_content">
@@ -165,6 +168,7 @@ $row_RecTotal = $RecTotal->fetch_assoc();
           </div>          
             <?php }else{ ?>
             <div class="infoDiv">目前購物車是空的。</div>
+            <input type="button" name="button10" id="button10" value="回上一頁" onClick="window.location.href='?cartaction=back'">                            
           <?php } ?></td>
         </tr>
     </table></td>

@@ -34,13 +34,13 @@ $row_RecMember=$RecMember->fetch_assoc();
             <label class="menu-icon" for="menu-btn"><span class="nav-icon"></span></label>
             <ul class="menu">
 				<li><a href="about.php">品牌起源</a></li>
-				<li><a href="#forget">看看環境</a></li>
+				<li><a href="kitchen_index.php">看看環境</a></li>
 				<li><a href="#subscribe">?????</a></li>
 				<?php if(!isset($_SESSION["loginMember"]) || ($_SESSION["loginMember"]=="")){?>
-					<li><a href="member_index.php">Sign in</a></li><br>
-					<?php }
-					elseif($_SESSION["loginMember"]=="admin"){ echo "<li><a href='admin_add.php'>管理公告</a></li>"."<li><a href='member_admin.php'>系統管理</a></li>"."<li><a href='?logout=true'>Sign out&nbsp[".$_SESSION["loginMember"]."]</a></li>"; }
-					else{ echo "<li><a href='member_center.php'>會員中心</a></li>"."<li><a href='?logout=true'>Sign out&nbsp[".$_SESSION["loginMember"]."]</a></li>"; }?></a>
+				<li><a href="member_index.php">Sign in</a></li><br>
+				<!--這段更改--><a href="member_admin.php"><?php }
+				elseif($_SESSION["loginMember"]=="admin"){ echo "<li><a href='admin_add.php'>管理公告</a></li>"."<li><a href='member_admin.php'>系統管理</a></li>"."<li><a href='?logout=true'>Sign out&nbsp[".$_SESSION["loginMember"]."]</a></li>"; }
+				else{ echo "<li><a href='member_center.php'>會員中心</a></li>"."<li><a href='?logout=true'>Sign out&nbsp[".$_SESSION["loginMember"]."]</a></li>"; }?></a>
 			</ul>
         </header>
 		<div class="id_content">
@@ -117,25 +117,6 @@ $row_RecMember=$RecMember->fetch_assoc();
 									<?php $_SESSION['m_id'] = $row_RecMember["m_id"];?>
 									<h1></h1>
 									<p align="center">
-													<?php
-													//--------------------取得場地擁有者的mid--------------
-													$check_owner_cmd = "SELECT `m_id` FROM `kitchen_data`GROUP BY `m_id`";
-													$check_owner_cmd_res = $db_link->query($check_owner_cmd);
-													while ($check_owner_cmd_result = $check_owner_cmd_res->fetch_assoc()) {
-														// echo $check_owner_cmd_result["m_id"]."<br>";
-														$owner_mid[] = $check_owner_cmd_result["m_id"];
-													}
-													foreach ($owner_mid as $a => $b) {
-														if ($_SESSION['m_id'] == $b) {
-															echo "<input type=\"button\" class=\"button button1\" value=\"場地管理\" onclick=\"location.href='manage_schedule_0.php'\">";
-														} elseif ($_SESSION['m_id'] == 1) {
-															//如果是管理者ID的話跑這段code
-															echo "<input type=\"button\" class=\"button button1\" value=\"場地管理\" onclick=\"location.href='manage_schedule_0.php'\">";
-															break;
-														}
-													}
-													// echo "<pre>" . print_r($owner_mid, TRUE) . "</pre>";
-													?>
 									<input type="button" class="button button1" value="預約場地" onclick="location.href='kitchen_index.php'">
 									<input type="button" class="button button1" value="廚房列表" onclick="location.href='kit_index.php'">
 									<input type="button" class="button button1" value="修改資料" onclick="location.href='member_update.php'">

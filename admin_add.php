@@ -174,15 +174,15 @@ function checkupman(){
 				<input class="menu-btn" type="checkbox" id="menu-btn" />
 				<label class="menu-icon" for="menu-btn"><span class="nav-icon"></span></label>
 				<ul class="menu">
-					<li><a href="about.php">品牌起源</a></li>
-					<li><a href="#forget">看看環境</a></li>
-					<li><a href="#subscribe">?????</a></li>
-					<?php if(!isset($_SESSION["loginMember"]) || ($_SESSION["loginMember"]=="")){?>
-					<li><a href="member_index.php">Sign in</a></li><br>
-					<!--這段更改--><a href="member_admin.php"><?php }
-					elseif($_SESSION["loginMember"]=="admin"){ echo "<li><a href='admin_add.php'>管理公告</a></li>"."<li><a href='member_admin.php'>系統管理</a></li>"."<li><a href='?logout=true'>Sign out&nbsp[".$_SESSION["loginMember"]."]</a></li>"; }
-					else{ echo "<li><a href='member_center.php'>會員中心</a></li>"."<li><a href='?logout=true'>Sign out&nbsp[".$_SESSION["loginMember"]."]</a></li>"; }?></a>
-				</ul>
+				<li><a href="about.php">品牌起源</a></li>
+				<li><a href="kitchen_index.php">看看環境</a></li>
+				<li><a href="#subscribe">?????</a></li>
+				<?php if(!isset($_SESSION["loginMember"]) || ($_SESSION["loginMember"]=="")){?>
+				<li><a href="member_index.php">Sign in</a></li><br>
+				<!--這段更改--><a href="member_admin.php"><?php }
+				elseif($_SESSION["loginMember"]=="admin"){ echo "<li><a href='admin_add.php'>管理公告</a></li>"."<li><a href='member_admin.php'>系統管理</a></li>"."<li><a href='?logout=true'>Sign out&nbsp[".$_SESSION["loginMember"]."]</a></li>"; }
+				else{ echo "<li><a href='member_center.php'>會員中心</a></li>"."<li><a href='?logout=true'>Sign out&nbsp[".$_SESSION["loginMember"]."]</a></li>"; }?></a>
+			</ul>
 			</header>
 			<div class="id_content">
 				<div class="container" style="margin: auto;width:100%;">

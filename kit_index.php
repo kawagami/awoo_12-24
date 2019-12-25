@@ -14,7 +14,6 @@ if(isset($_GET["logout"]) && ($_GET["logout"]=="true")){
 	header("Location: index2.php");
 }
 
-
 //刪除廚房
 if(isset($_GET["action"])&&($_GET["action"]=="delete")){
   $query_delkitchen = "DELETE kitchen_data,kitchen_photo FROM kitchen_data LEFT JOIN kitchen_photo ON kitchen_data.kit_id=kitchen_photo.kit_id WHERE kitchen_data.kit_id=?";
@@ -91,6 +90,18 @@ $total_pages = ceil($total_records/$pageRow_records);
 
           padding:3px;
         }
+
+        .fix img{
+          margin:5px;
+          width:18px;          
+        }
+        
+      @media only screen and (max-width: 500px) {
+          
+        .none{
+          display:none;
+        }
+      }
         
         </style>   
 	</head>
@@ -106,7 +117,9 @@ $total_pages = ceil($total_records/$pageRow_records);
 				<li><a href="#subscribe">?????</a></li>
 				<?php if(!isset($_SESSION["loginMember"]) || ($_SESSION["loginMember"]=="")){?>
 				<li><a href="member_index.php">Sign in</a></li><br>
-				<!--這段更改--><a href="member_admin.php"><?php }else{ echo "<li><a href='member_center.php'>會員中心</a></li>"."<li><a href='?logout=true'>Sign out&nbsp[".$_SESSION["loginMember"]."]</a></li>";?><?php }?></a>
+				<!--這段更改--><a href="member_admin.php"><?php }
+				elseif($_SESSION["loginMember"]=="admin"){ echo "<li><a href='admin_add.php'>管理公告</a></li>"."<li><a href='member_admin.php'>系統管理</a></li>"."<li><a href='?logout=true'>Sign out&nbsp[".$_SESSION["loginMember"]."]</a></li>"; }
+				else{ echo "<li><a href='member_center.php'>會員中心</a></li>"."<li><a href='?logout=true'>Sign out&nbsp[".$_SESSION["loginMember"]."]</a></li>"; }?></a>
 			</ul>
         </header>
 		<div class="id_content">
@@ -118,24 +131,24 @@ $total_pages = ceil($total_records/$pageRow_records);
           <table class="title" width="100%" border="0" cellpadding="2" cellspacing="1" bgcolor="#F0F0F0">
             <tr>            
               <th>廚房名稱</th>
-              <th>環境照片</th>
+              <th class="none">環境照片</th>
               <th>所在地區</th>
-               <th>開放日期</th>
-              <th>開放時間</th>
-              <th>容納人數</th>
+              <th class="none">開放日期</th>
+              <th class="none">開放時間</th>
+              <th class="none">容納人數</th>
               <th>價格/清潔費</th>
               <th>修改/刪除</th>             
             </tr>
 			      <?php while($row_RecKitchen=$RecKitchen->fetch_assoc()){ ?> 
             <tr class="kit_info">                          
               <td><a href="kit_show.php?id=<?php echo $row_RecKitchen["kit_id"];?>"><?php echo $row_RecKitchen["kit_title"];?></a></td>  
-              <td width="50px"><img width="100%" src="photos/<?php echo $row_RecKitchen["kit_picurl"];?>"></td>   
+              <td class="none" width="50px"><img width="100%" src="photos/<?php echo $row_RecKitchen["kit_picurl"];?>"></td>   
               <td><?php echo $row_RecKitchen["kit_county"];?> <?php echo $row_RecKitchen["kit_city"];?></td>                        
-              <td><?php echo $row_RecKitchen["kit_startdate"];?>~<?php echo $row_RecKitchen["kit_enddate"];?></td>
-              <td><?php echo substr($row_RecKitchen["kit_starttime"],0,-3);?>~<?php echo substr($row_RecKitchen["kit_endtime"],0,-3);?></td>
-              <td><?php echo $row_RecKitchen["kit_capacity"];?></td>
+              <td class="none"><?php echo $row_RecKitchen["kit_startdate"];?>~<?php echo $row_RecKitchen["kit_enddate"];?></td>
+              <td class="none"><?php echo substr($row_RecKitchen["kit_starttime"],0,-3);?>~<?php echo substr($row_RecKitchen["kit_endtime"],0,-3);?></td>
+              <td class="none"><?php echo $row_RecKitchen["kit_capacity"];?></td>
               <td><?php echo $row_RecKitchen["kit_price"];?>/<?php echo $row_RecKitchen["kit_cleanfee"];?></td>
-              <td width="10%"><a href="kit_update.php?id=<?php echo $row_RecKitchen["kit_id"];?>"><img src="images/fix.png" width=20px;></a> <a href="?action=delete&id=<?php echo $row_RecKitchen["kit_id"];?>" onClick="return deletesure();"><img src="images/delete.png" width=20x;></a></td>  
+              <td class="fix" width="10%"><a href="kit_update.php?id=<?php echo $row_RecKitchen["kit_id"];?>"><img src="images/fix.png"></a><a href="?action=delete&id=<?php echo $row_RecKitchen["kit_id"];?>" onClick="return deletesure();"><img src="images/delete.png"></a></td>  
             </tr>
 			      <?php }?>
           </table>          

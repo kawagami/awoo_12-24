@@ -1,9 +1,14 @@
+
+
 html, body {
     /* 設定body高度為100% 拉到視窗可視的大小 */
     height: 100%;
 	margin: 0px auto;
 	padding:0px;
 	font-family: Microsoft JhengHei;
+}
+ol, ul{
+	margin:0px;padding:0px;
 }
 
 .id_wrapper {
@@ -115,6 +120,7 @@ html, body {
     transform: rotate(45deg);
     top:0;
 }
+
 .button{
         background-color: #008CBA; /* Green */
         border: none;
@@ -278,7 +284,7 @@ img{
 	text-align:center;
 }
 
-#demo-table {                       
+/* #demo-table {                       
     width: 100%;
     border-spacing: initial;
     margin: 20px 50%;
@@ -286,7 +292,7 @@ img{
     table-layout: auto;
     line-height: 1.8em;
     color: #333;
-}
+} */
  
  
 #demo-table ul {
@@ -294,20 +300,31 @@ img{
     padding: 5px;
 }
  
-#demo-table li {
+/* #ass li {
     cursor: pointer;
     list-style-type: none;
     display: inline-block;
     color: #F0F0F0;
     text-shadow: 0 0 1px #666666;
     font-size: 20px;
-}
+} */
  
-#demo-table .highlight, #demo-table .selected {
+.selected {
     color: #F4B30A;
-    text-shadow: 0 0 1px #F48F0A;
+	text-shadow: 0 0 1px #F48F0A;
+	display: inline-block;
 }
- 
+#selected li {
+	cursor: pointer;
+    list-style-type: none;
+    display: inline-block;
+    color: #F0F0F0;
+    text-shadow: 0 0 1px #666666;
+    font-size: 20px;
+}
+
+
+
 .star-rating-box {
     border: #E4E4E4 1px solid;
     margin: 10px 0px;

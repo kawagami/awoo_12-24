@@ -1,5 +1,5 @@
 <?php
-//這是一個對資料庫內容做詳細控制的類別檔
+//這是一個對資料庫內容做詳細控制的類別檔selected
 require_once "DBController.php"; // 匯入資料庫控制檔
 
 class Rate extends DBController  //繼承父類別DBController

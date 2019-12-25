@@ -1,15 +1,12 @@
 <?php
-
-
-
-
-
-
-session_start();
-require_once("connMysql.php");	
+require_once("connMysql.php");
+setcookie("time", "", time() - 3600);
+setcookie("date", "", time() - 3600);
 require_once ("Rate.php");      //引入檔匯入
 $rate = new Rate();             //建立一個新的Rate物件，命名為$rate
 $result = $rate->getAllPost();  //取得所有廚房的評分紀錄
+session_start();
+	
 
 function GetSQLValueString($theValue, $theType) {
   switch ($theType) {
@@ -70,8 +67,10 @@ $total_pages = ceil($total_records/$pageRow_records);
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/imagehover.css/2.0.0/css/imagehover.min.css"></script>		
 		<style>
 		@charset "utf-8";
+		ol, ul{
+		margin:0px;padding:0px;
+		}
 		#mainRegion {
-
 		}
 		#mainRegion p {
 			font-family: Verdana, Arial, Helvetica, sans-serif;
@@ -177,7 +176,7 @@ $total_pages = ceil($total_records/$pageRow_records);
 		}
 		#mainRegion .albumDiv {
 			float: left;
-			height: 200px;
+			height: 300px;
 			width: 150px;
 			text-align: center;
 			margin-right: 22px;
@@ -255,6 +254,11 @@ $total_pages = ceil($total_records/$pageRow_records);
 			width:100%;
 			border-radius: 10px;
 		}
+		.selected {
+    color: #F4B30A;
+	text-shadow: 0 0 1px #F48F0A;
+	display: inline-block;
+}
 		</style>
 	</head>
     <body style="font-family: Microsoft JhengHei;">
@@ -269,7 +273,9 @@ $total_pages = ceil($total_records/$pageRow_records);
 				<li><a href="#subscribe">?????</a></li>
 				<?php if(!isset($_SESSION["loginMember"]) || ($_SESSION["loginMember"]=="")){?>
 				<li><a href="member_index.php">Sign in</a></li><br>
-				<!--這段更改--><a href="member_admin.php"><?php }else{ echo "<li><a href='member_center.php'>會員中心</a></li>"."<li><a href='?logout=true'>Sign out&nbsp[".$_SESSION["loginMember"]."]</a></li>";?><?php }?></a>
+				<!--這段更改--><a href="member_admin.php"><?php }
+				elseif($_SESSION["loginMember"]=="admin"){ echo "<li><a href='admin_add.php'>管理公告</a></li>"."<li><a href='member_admin.php'>系統管理</a></li>"."<li><a href='?logout=true'>Sign out&nbsp[".$_SESSION["loginMember"]."]</a></li>"; }
+				else{ echo "<li><a href='member_center.php'>會員中心</a></li>"."<li><a href='?logout=true'>Sign out&nbsp[".$_SESSION["loginMember"]."]</a></li>"; }?></a>
 			</ul>
         </header>
 		<div class="id_content">
@@ -288,6 +294,18 @@ $total_pages = ceil($total_records/$pageRow_records);
 						   <div class="actionDiv">廚房總數: <?php echo $total_records;?></div>  
 						   <div class="normalDiv"></div>
 				<?php	while($row_RecAlbum=$RecAlbum->fetch_assoc()){ ?>
+<?php
+//若資料庫內有評分紀錄則運行，$product=每一個廚房的評分資料，$ratingResult=評分資料中的分數總合
+if (! empty($result)) {
+    $i = 0;
+    $product = $rate->getProductidBYProduct($row_RecAlbum["kit_id"]);
+    $ratingResult = $product[0]["rating_total"];
+    if (! empty($ratingResult)){  //算出評分總和，取到小數第一位
+      $average = round(($product[0]["rating_total"] / $product[0]["rating_count"]), 1);  
+    }  
+?>
+						
+					
 						   <div class="albumDiv" align="center">
 						   <div class="piccontainer">
 						   <div class="picDiv"><a href="kit_show.php?id=<?php echo $row_RecAlbum["kit_id"];?>"><?php if($row_RecAlbum["kit_pid"]==0){?><img src="images/nopic.png" alt="暫無圖片" width="120" height="120" border="0" /><?php }else{?><img src="photos/<?php echo $row_RecAlbum["kit_picurl"];?>" alt="<?php echo $row_RecAlbum["kit_subject"];?>" width="120" height="120" border="0" /><?php }?></a></div>
@@ -295,28 +313,34 @@ $total_pages = ceil($total_records/$pageRow_records);
 								<div class="text">Welcome</div>
 							  </div>
 							</div>
-
 						   <div class="albuminfo"><a href="kit_show.php?id=<?php echo $row_RecAlbum["kit_id"];?>"><?php echo $row_RecAlbum["kit_subject"];?></a><br />
-							 <span class="smalltext"> <?php echo $row_RecAlbum["kit_price"];?> 元</span>
-							 <br>
-							 <br>
-							 
-						   </div>
-						   <?php
-//若資料庫內有評分紀錄則運行，$product=每一個廚房的評分資料，$ratingResult=評分資料中的分數總合
-if (! empty($result)) {
-    $i = 0;
-    $product = $rate->getProductidBYProduct($row_RecAlbum["kit_id"]);
-	$ratingResult = $product[0]["rating_total"];
+							 <span class="smalltext"> <?php echo $row_RecAlbum["kit_price"];?> 元</span><br>
+							 <div id="star-rating-count-<?php echo $product[0]["kit_id"]; ?>" class="star-rating-count">
 
-    if (! empty($ratingResult)){  //算出評分總和，取到小數第一位
-      $average = round(($product[0]["rating_total"] / $product[0]["rating_count"]), 1);  
-    }  
-?>
-            <td id="demo-table" width="200px" align="center">
-              <div id="product-<?php echo $product[0]["kit_id"]; ?>" class="star-rating-box">
+
+
+
+            <!-- <td id="demo-table" width="200px" align="center">
+			  <div id="product-<?php echo $product[0]["kit_id"]; ?>" class="star-rating-box"> -->
+			  <!-- <div id="ass" style='
+			  
+				cursor: pointer;
+				list-style-type: none;
+				display: inline-block;
+				color: #F0F0F0;
+				text-shadow: 0 0 1px #666666;
+				font-size: 20px;
+			 
+			 '> -->
               <input type="hidden" name="rating" id="rating" value="<?php echo $average; ?>" />
-                <ul>
+                <ul style='
+			  
+			  cursor: pointer;
+			  list-style-type: none;
+			  display: inline-block;
+			  color: #F0F0F0;
+			  text-shadow: 0 0 1px #666666;
+			  font-size: 20px;'>
 <?php   //建立5個<li>並根據資料庫內的分數紀錄添加"selected"類別
 for ($i = 1; $i <= 5; $i ++) {
     $selected = "";
@@ -324,7 +348,7 @@ for ($i = 1; $i <= 5; $i ++) {
         $selected = "selected";
     } 
 ?>
-                    <li class='<?php echo $selected; ?>'>&#9733;</li>  
+					<li	style='display: inline-block;' class='<?php echo $selected; ?>'>&#9733;</li>  
 <?php }  ?>
                 </ul>
                 <div id="star-rating-count-<?php echo $product[0]["kit_id"]; ?>" class="star-rating-count">
@@ -335,13 +359,14 @@ if (! empty($ratingResult)) {  //印出平均分數/資料筆數
   echo "尚無評分紀錄";}
 ?>
                 </div>
-              </div>
-            </td>
+			  </div>
+			  
+            
 <?php
 }
 ?>
-
-
+							 
+						   </div>
 						   </div>
 						   <?php }?>
 						   <div class="navDiv">

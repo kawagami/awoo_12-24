@@ -70,12 +70,12 @@ $total_pages = ceil($total_records/$pageRow_records);
     <head>
         <link rel="stylesheet" href="index2.css">
         <meta name="viewport" content="width=device-width, initial-scale=1.0 shrink-to-fit=no">
-		<meta charset="utf-8">
-		<title>管理廚房</title>
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-		<script language="javascript">
-		function deletesure(){
+		    <meta charset="utf-8">
+		    <title>管理廚房</title>
+		    <meta name="viewport" content="width=device-width, initial-scale=1">
+		    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+		    <script language="javascript">
+		    function deletesure(){
             if (confirm('\n您確定要刪除這個廚房嗎?\n刪除後無法恢復!\n')) return true;
             return false;
           }
@@ -95,21 +95,31 @@ $total_pages = ceil($total_records/$pageRow_records);
         }
 
         .kit_info td{
-
           padding:3px;
         }    
         
+        .fix img{
+          margin:5px;
+          width:18px;
+        }
+
+        @media only screen and (max-width: 500px) {
+          
+          .none{
+            display:none;
+          }
+        }
         
         </style>
    
 	</head>
     <body style="font-family: Microsoft JhengHei;">
-	<div class="id_wrapper">
-		<header class="header">
-            <a href="index2.php" class="logo" style="text-decoration:none;color:#fff;">來吃飯</a>
-            <input class="menu-btn" type="checkbox" id="menu-btn" />
-            <label class="menu-icon" for="menu-btn"><span class="nav-icon"></span></label>
-            <ul class="menu">
+	    <div class="id_wrapper">
+		    <header class="header">
+          <a href="index2.php" class="logo" style="text-decoration:none;color:#fff;">來吃飯</a>
+          <input class="menu-btn" type="checkbox" id="menu-btn" />
+          <label class="menu-icon" for="menu-btn"><span class="nav-icon"></span></label>
+          <ul class="menu">
 				<li><a href="about.php">品牌起源</a></li>
 				<li><a href="kitchen_index.php">看看環境</a></li>
 				<li><a href="#subscribe">?????</a></li>
@@ -128,25 +138,23 @@ $total_pages = ceil($total_records/$pageRow_records);
             <tr>              
               <th>廚房主人</th>
               <th>廚房名稱</th>
-              <th>環境照片</th>
-              <th>開放日期</th>
-              <th>開放時間</th>
-              <th>容納人數</th>
-              <th>價格</th>
-              <th>清潔費</th>
+              <th class="none">環境照片</th>
+              <th class="none">開放日期</th>
+              <th class="none">開放時間</th>
+              <th class="none">容納人數</th>
+              <th>價格/清潔費</th>
               <th>修改/刪除</th>
             </tr>
 			      <?php while($row_RecKitchen=$RecKitchen->fetch_assoc()){ ?>
             <tr class="kit_info">
               <td><?php echo $row_RecKitchen["m_username"];?></td>
               <td><a href="kit_show.php?id=<?php echo $row_RecKitchen["kit_id"];?>"><?php echo $row_RecKitchen["kit_title"];?></td>
-              <td width="50px"><p><img width="100%" src="photos/<?php echo $row_RecKitchen["kit_picurl"];?>"></td>            
-              <td><?php echo $row_RecKitchen["kit_startdate"];?>~<?php echo $row_RecKitchen["kit_enddate"];?></td>
-              <td><?php echo substr($row_RecKitchen["kit_starttime"],0,-3);?>~<?php echo substr($row_RecKitchen["kit_endtime"],0,-3);?></td>
-              <td><?php echo $row_RecKitchen["kit_capacity"];?></td>
-              <td><?php echo $row_RecKitchen["kit_price"];?></td>
-              <td><?php echo $row_RecKitchen["kit_cleanfee"];?></td>
-              <td width="10%"><a href="kit_update.php?id=<?php echo $row_RecKitchen["kit_id"];?>"><img src="images/fix.png" width=20px;></a> <a href="?action=delete&id=<?php echo $row_RecKitchen["kit_id"];?>" onClick="return deletesure();"><img src="images/delete.png" width=20x;></a></td> 
+              <td class="none" width="50px"><p><img width="100%" src="photos/<?php echo $row_RecKitchen["kit_picurl"];?>"></td>            
+              <td class="none"><?php echo $row_RecKitchen["kit_startdate"];?>~<?php echo $row_RecKitchen["kit_enddate"];?></td>
+              <td class="none"><?php echo substr($row_RecKitchen["kit_starttime"],0,-3);?>~<?php echo substr($row_RecKitchen["kit_endtime"],0,-3);?></td>
+              <td class="none"><?php echo $row_RecKitchen["kit_capacity"];?></td>
+              <td><?php echo $row_RecKitchen["kit_price"];?>/<?php echo $row_RecKitchen["kit_cleanfee"];?></td>
+              <td class="fix" width="10%"><a href="kit_update.php?id=<?php echo $row_RecKitchen["kit_id"];?>"><img src="images/fix.png"></a><a href="?action=delete&id=<?php echo $row_RecKitchen["kit_id"];?>" onClick="return deletesure();"><img src="images/delete.png"></a></td> 
             </tr>
 			      <?php }?>
           </table>

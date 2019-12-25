@@ -73,7 +73,7 @@ if(isset($_POST["username"]) && isset($_POST["passwd"])){
             <label class="menu-icon" for="menu-btn"><span class="nav-icon"></span></label>
             <ul class="menu">
 				<li><a href="about.php">品牌起源</a></li>
-				<li><a href="#forget">看看環境</a></li>
+				<li><a href="kitchen_index.php">看看環境</a></li>
 				<li><a href="#subscribe">?????</a></li>
 				<?php if(!isset($_SESSION["loginMember"]) || ($_SESSION["loginMember"]=="")){?>
 					<li><a href="member_index.php">Sign in</a></li><br>

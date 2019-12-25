@@ -16,7 +16,7 @@ session_start();
 
 //檢查是否經過登入
 if (!isset($_SESSION["loginMember"]) || ($_SESSION["loginMember"] == "")) {
-    header("Location: login.php");
+    header("Location: member_index.php");
 }
 //執行登出動作
 if (isset($_GET["logout"]) && ($_GET["logout"] == "true")) {
@@ -81,14 +81,18 @@ $today = date("Y-m-d");
 <html>
     <head>
         <link rel="stylesheet" href="index2.css">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0 shrink-to-fit=no">
+        <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0 shrink-to-fit=no"> -->
 		<meta charset="utf-8">
 		<title>上傳我的廚房</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
         <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
-        <script type="text/javascript" src="scripts/city.js"></script>
+        <script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js'></script>
+        <script type="text/javascript">
+            var jQuery_3_4_0 = $.noConflict(true); //載入多個jQuery
+        </script>
+        <script type="text/javascript" src="js/city.js"></script>
 		<script language="javascript">
 		function checkForm() {
             if (document.kit_upload.kit_title.value == "") {
@@ -205,7 +209,7 @@ $today = date("Y-m-d");
         })
     </script>
 
-    <style type="text/css">
+<style type="text/css">
         .kit_add{
             width:60%;
             margin:auto;
@@ -213,6 +217,65 @@ $today = date("Y-m-d");
 
         .title{
             text-align:center;
+            font-weight:bold;
+        }
+
+        textarea {
+            border-radius: 10px;
+            border: none;
+            padding: 5px;
+            width:80%;
+            height:100px;
+        }
+        textarea:focus {
+            background-color: #C0C0C0;
+            color: #FFFFFF;
+            transition: 0.5s;
+        }
+
+        .new_photo {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .new_photo .pic {
+            width: 300px;
+            padding: 5px;            
+        }
+
+        .new_photo img {
+            width: 80%;
+            padding: 5px;
+        }
+
+        label {
+            display: inline-block;
+        }
+
+        .pic span {
+            margin: 0 3px;
+        }
+
+        .ctl{
+                text-align: center;
+            }
+
+        @media only screen and (max-width: 1023px) {
+            .kit_add{
+                width:100%;                
+            }       
+            .new_photo{
+                text-align: center;
+            }
+            .new_photo .pic{
+                width: 100%;
+            }  
+            
+            .ctl input{
+                padding:10px;
+            }
+           
         }
 
     </style>
@@ -248,7 +311,7 @@ $today = date("Y-m-d");
                             <input id="kit_city" name="kit_city" type="hidden" value="">
                             <input class="normalinput" id="kit_add" name="kit_add" type="text" size="40" />
                    
-                            <p>描　　述　<textarea class="normalinput" id="kit_dese" name="kit_dese" cols="45" rows="5"></textarea></p>
+                            <p>描　　述</p><p><textarea id="kit_dese" name="kit_dese"></textarea></p>
                             <p>開放日期　<input class="normalinput" id="kit_startdate" name="kit_startdate" type="date" min="<?php echo $today; ?>"> - <input class="normalinput" id="kit_enddate" name="kit_enddate" type="date"></p>
                             <p>開放時間　<input class="normalinput" id="kit_starttime" name="kit_starttime" type="time"> - <input class="normalinput" id="kit_endtime" name="kit_endtime" type="time"></p>
                             <p>容納人數　<input class="normalinput" id="kit_capacity" name="kit_capacity" type="text"> 人
@@ -256,19 +319,109 @@ $today = date("Y-m-d");
                             <p>清潔費用　<input class="normalinput" id="kit_cleanfee" name="kit_cleanfee" type="text"> 元</p>
                         </div> 
 
-                        <div class="new_photo"> 
-                            <h3><strong>環境照片</strong></h3>                       
-                            <p>照片1 <input type="file" name="kit_picurl[]" id="kit_picurl[]" />
-                                說明1：<input class="normalinput" type="text" name="kit_subject[]" id="kit_subject[]" /></p>
-                            <p>照片2 <input type="file" name="kit_picurl[]" id="kit_picurl[]" />
-                                說明2：<input class="normalinput" type="text" name="kit_subject[]" id="kit_subject[]" /></p>
-                            <p>照片3 <input type="file" name="kit_picurl[]" id="kit_picurl[]" />
-                                說明3：<input class="normalinput" type="text" name="kit_subject[]" id="kit_subject[]" /></p>
-                            <p>照片4 <input type="file" name="kit_picurl[]" id="kit_picurl[]" />
-                                說明4：<input class="normalinput" type="text" name="kit_subject[]" id="kit_subject[]" /></p>
-                            <p>照片5 <input type="file" name="kit_picurl[]" id="kit_picurl[]" />
-                                說明5：<input class="normalinput" type="text" name="kit_subject[]" id="kit_subject[]" /></p>
-                        </div>
+                        <h3 class="title">環境照片</h3>
+                            <hr style="border: 0; height: 1px; background: #333; background-image: linear-gradient(to right, #ccc, #333, #ccc);">
+                            <div class="new_photo">
+                                <div class="pic">
+                                    <label class="btn btn-info"><input id="upload_img1" style="display:none;" type="file" accept="image/*" name="kit_picurl[]">
+                                    <i class="fa fa-photo"></i> 選擇照片 </label><span id="file_name1"></span><input type="button" id="cancel1" name="cancel1" value="清除">
+                                    <figure><img id="file_thumbnail1"></figure>
+                                    <p>說明：<input class="normalinput" type="text" name="kit_subject[]" id="kit_subject[]" /></p>
+                                </div>
+                                <div class="pic">
+                                    <label class="btn btn-info"><input id="upload_img2" style="display:none;" type="file" accept="image/*" name="kit_picurl[]">
+                                    <i class="fa fa-photo"></i> 選擇照片 </label><span id="file_name2"></span><input type="button" id="cancel2" name="cancel2" value="清除">
+                                    <figure><img id="file_thumbnail2"></figure>
+                                    <p>說明：<input class="normalinput" type="text" name="kit_subject[]" id="kit_subject[]" /></p>
+                                </div>
+                                <div class="pic">
+                                    <label class="btn btn-info"><input id="upload_img3" style="display:none;" type="file" accept="image/*" name="kit_picurl[]">
+                                    <i class="fa fa-photo"></i> 選擇照片 </label><span id="file_name3"></span><input type="button" id="cancel3" name="cancel3" value="清除">
+                                    <figure><img id="file_thumbnail3"></figure>
+                                    <p>說明：<input class="normalinput" type="text" name="kit_subject[]" id="kit_subject[]" /></p>
+                                </div>
+                                <div class="pic">
+                                    <label class="btn btn-info"><input id="upload_img4" style="display:none;" type="file" accept="image/*" name="kit_picurl[]">
+                                    <i class="fa fa-photo"></i> 選擇照片 </label><span id="file_name4"></span><input type="button" id="cancel4" name="cancel4" value="清除">
+                                    <figure><img id="file_thumbnail4"></figure>
+                                    <p>說明：<input class="normalinput" type="text" name="kit_subject[]" id="kit_subject[]" /></p>
+                                </div>
+                                <div class="pic">
+                                    <label class="btn btn-info"><input id="upload_img5" style="display:none;" type="file" accept="image/*" name="kit_picurl[]">
+                                    <i class="fa fa-photo"></i> 選擇照片 </label><span id="file_name5"></span><input type="button" id="cancel5" name="cancel5" value="清除">
+                                    <figure><img id="file_thumbnail5"></figure>
+                                    <p>說明：<input class="normalinput" type="text" name="kit_subject[]" id="kit_subject[]" /></p>
+                                </div>
+                            </div>
+
+                                <script language="javascript" type="text/javascript">
+                                    (function($) {
+                                        //照片1
+                                        $('#upload_img1').on('change', function(e) {
+                                            var file = e.currentTarget.files[0]; //檔案資訊
+                                            var name = e.currentTarget.files[0].name; //檔案名稱
+                                            $('#file_name1').text(name);
+                                            $('#file_thumbnail1').attr('src', URL.createObjectURL(file));
+                                        });
+                                        //清除照片1
+                                        $('#cancel1').on('click', function() {
+                                            $('#file_name1').text(name);
+                                            $("#file_thumbnail1").attr('src', ' ');
+                                        });
+
+                                        //照片2
+                                        $('#upload_img2').on('change', function(e) {
+                                            var file = e.currentTarget.files[0]; //檔案資訊
+                                            var name = e.currentTarget.files[0].name; //檔案名稱
+                                            $('#file_name2').text(name);
+                                            $('#file_thumbnail2').attr('src', URL.createObjectURL(file));
+                                        });
+                                        //清除照片2
+                                        $('#cancel2').on('click', function() {
+                                            $('#file_name2').text(name);
+                                            $("#file_thumbnail2").attr('src', ' ');
+                                        });
+
+                                        //照片3
+                                        $('#upload_img3').on('change', function(e) {
+                                            var file = e.currentTarget.files[0]; //檔案資訊
+                                            var name = e.currentTarget.files[0].name; //檔案名稱
+                                            $('#file_name3').text(name);
+                                            $('#file_thumbnail3').attr('src', URL.createObjectURL(file));
+                                        });
+                                        //清除照片3
+                                        $('#cancel3').on('click', function() {
+                                            $('#file_name3').text(name);
+                                            $("#file_thumbnail3").attr('src', ' ');
+                                        });
+
+                                        //照片4
+                                        $('#upload_img4').on('change', function(e) {
+                                            var file = e.currentTarget.files[0]; //檔案資訊
+                                            var name = e.currentTarget.files[0].name; //檔案名稱
+                                            $('#file_name4').text(name);
+                                            $('#file_thumbnail4').attr('src', URL.createObjectURL(file));
+                                        });
+                                        //清除照片4
+                                        $('#cancel4').on('click', function() {
+                                            $('#file_name4').text(name);
+                                            $("#file_thumbnail4").attr('src', ' ');
+                                        });
+
+                                        //照片5
+                                        $('#upload_img5').on('change', function(e) {
+                                            var file = e.currentTarget.files[0]; //檔案資訊
+                                            var name = e.currentTarget.files[0].name; //檔案名稱
+                                            $('#file_name5').text(name);
+                                            $('#file_thumbnail5').attr('src', URL.createObjectURL(file));
+                                        });
+                                        //清除照片5
+                                        $('#cancel5').on('click', function() {
+                                            $('#file_name5').text(name);
+                                            $("#file_thumbnail5").attr('src', ' ');
+                                        });
+                                    })(jQuery_3_4_0);
+                                </script>
 
                         <div class="ctl">
                             <input id="action" name="action" class="button button1" type="hidden" value="add">
