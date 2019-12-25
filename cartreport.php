@@ -1,15 +1,12 @@
 <?php
 require_once("connMysql.php");
-session_start();
-if (isset($_SESSION['sql_cmd'])) {
-	$db_link->query($_SESSION['sql_cmd']);
-}else{
-	echo "no";
-}
-
 if (isset($_POST["customername"]) && ($_POST["customername"] != "")) {
 	//購物車開始
 	require_once("mycart.php");
+	session_start();
+	if (isset($_SESSION['sql_cmd'])) {
+		$db_link->query($_SESSION['sql_cmd']);
+	}
 	$cart = &$_SESSION['cart']; // 將購物車的值設定為 Session
 	if (!is_object($cart)) $cart = new myCart();
 	//購物車結束	
